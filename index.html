@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>VOZX AI — CyberGuard Phishing Attack Shield & Safety Assistant</title>
   <link rel="icon" type="image/png" href="logo.png">
   <!-- Tailwind CSS -->
@@ -124,19 +127,24 @@
       <!-- Top Ambient Teal Glow Effect -->
       <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-80 h-52 bg-gradient-to-b from-[#00E599]/25 to-transparent rounded-full blur-[65px] pointer-events-none"></div>
 
-      <!-- Top App Header Bar (Matching media_1789625575783.png: Clickable Logo + VOZX AI + Tabs) -->
-      <div class="relative z-30 px-5 pt-4 pb-2 flex items-center justify-between select-none">
+      <!-- Top App Header Bar (Exact match to media_1789625759509.png: Clickable Logo + VOZX AI + Tabs) -->
+      <div class="relative z-30 px-4 pt-4 pb-2 flex items-center justify-between select-none">
         <!-- Left: Clickable Logo + Name (Reloads on click) -->
         <button onclick="window.location.reload()" title="Click logo to reload page" class="flex items-center gap-2.5 group cursor-pointer active:scale-95 transition-transform text-left">
-          <img src="logo.png" alt="VOZX AI" class="w-8 h-8 rounded-xl object-contain drop-shadow-[0_0_8px_rgba(0,194,255,0.4)]">
-          <div class="flex flex-col">
-            <span class="text-[13px] font-bold font-mono tracking-wider text-[#00D2B4] leading-tight">VOZX  AI</span>
-            <span class="text-[10px] text-slate-400 font-mono leading-none mt-0.5">CyberGuard</span>
+          <div class="w-9 h-9 rounded-2xl bg-[#031522] border border-[#00E599]/40 p-1 flex items-center justify-center shadow-[0_0_12px_rgba(0,229,153,0.35)] group-hover:border-[#00E599] transition-all">
+            <img src="logo.png" alt="VOZX AI" class="w-full h-full object-contain rounded-xl">
+          </div>
+          <div class="flex flex-col justify-center">
+            <div class="flex items-center">
+              <span class="text-[13px] font-bold font-mono tracking-wider text-[#00D2B4] leading-tight">VOZX</span>
+              <span class="text-[13px] font-bold font-mono tracking-wider text-[#2A85FF] leading-tight ml-1.5">AI</span>
+            </div>
+            <span class="text-[10px] text-slate-400 font-sans font-medium tracking-normal leading-none mt-0.5">CyberGuard</span>
           </div>
         </button>
 
         <!-- Right: Capsule Screen Switcher -->
-        <div class="flex items-center gap-1 text-[11px] font-medium bg-[#04121E]/90 py-1 px-1.5 rounded-full border border-slate-800/80 shadow-inner">
+        <div class="flex items-center gap-0.5 text-[11px] font-medium bg-[#04121E]/95 py-1 px-1.5 rounded-full border border-slate-800/90 shadow-inner">
           <button onclick="navigateScreen('splash')" id="tab-btn-splash" class="px-2.5 py-0.5 rounded-full text-slate-300 hover:text-white transition cursor-pointer">Splash</button>
           <button onclick="navigateScreen('dashboard')" id="tab-btn-dashboard" class="px-2.5 py-0.5 rounded-full border border-[#00E599] text-[#00E599] bg-[#00E599]/10 font-medium transition cursor-pointer">Shield</button>
           <button onclick="navigateScreen('scan')" id="tab-btn-scan" class="px-2.5 py-0.5 rounded-full text-slate-300 hover:text-white transition cursor-pointer">Scan</button>

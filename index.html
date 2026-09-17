@@ -107,35 +107,15 @@
       .mockup-inner {
         border-radius: 0px !important;
       }
-      .desktop-screen-switcher {
-        display: none !important;
-      }
     }
   </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-0 sm:p-6 bg-slate-200">
-
-  <!-- Desktop Presentation Switcher & Info -->
-  <div class="desktop-screen-switcher w-full max-w-md flex items-center justify-between py-2.5 px-4 mb-3 bg-slate-900/90 text-white rounded-2xl shadow-xl backdrop-blur-md">
-    <div class="flex items-center gap-2">
-      <div class="w-2.5 h-2.5 rounded-full bg-[#00E599] animate-ping"></div>
-      <span class="text-xs font-extrabold font-mono tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#00E599] via-[#00D2B4] to-[#00C2FF]">VOZX.AI</span>
-      <span class="text-[10px] text-slate-400 font-mono">CyberGuard</span>
-    </div>
-
-    <!-- Quick Navigation between the 3 showcased screens in the prompt -->
-    <div class="flex items-center gap-1.5 text-[11px] font-semibold">
-      <button onclick="navigateScreen('splash')" id="tab-btn-splash" class="px-2.5 py-1 rounded-xl text-slate-400 hover:text-white transition">Splash</button>
-      <button onclick="navigateScreen('dashboard')" id="tab-btn-dashboard" class="px-2.5 py-1 rounded-xl bg-[#00D2B4]/20 text-[#00E599] border border-[#00E599]/40 transition">Dashboard</button>
-      <button onclick="navigateScreen('scan')" id="tab-btn-scan" class="px-2.5 py-1 rounded-xl text-slate-400 hover:text-white transition">Check Links</button>
-      <button onclick="navigateScreen('emergency')" id="tab-btn-emergency" class="px-2.5 py-1 rounded-xl text-red-400 hover:text-red-300 transition">SOS</button>
-    </div>
-  </div>
+<body class="flex flex-col items-center justify-center min-h-screen p-0 sm:p-6 bg-[#020813]">
 
   <!-- ============================================== -->
-  <!-- PHONE MOCKUP FRAME (Exact proportions of uploaded UI) -->
+  <!-- PHONE MOCKUP FRAME (Contained phone device) -->
   <!-- ============================================== -->
-  <div id="phoneDevice" class="mockup-outer relative w-[385px] h-[835px] bg-[#020B14] rounded-[48px] p-[10px] shadow-[0_25px_80px_rgba(0,0,0,0.5),0_0_50px_rgba(0,210,180,0.15)] border-[5px] border-slate-800/90 transition-all">
+  <div id="phoneDevice" class="mockup-outer relative w-[385px] h-[835px] bg-[#020B14] rounded-[48px] p-[10px] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_50px_rgba(0,210,180,0.2)] border-[5px] border-slate-800/90 transition-all">
 
     <!-- Phone Inner Glass Screen -->
     <div class="mockup-inner relative w-full h-full cyber-bg rounded-[40px] overflow-hidden flex flex-col justify-between select-none">
@@ -143,11 +123,11 @@
       <!-- Top Ambient Teal Glow Effect -->
       <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-80 h-52 bg-gradient-to-b from-[#00E599]/25 to-transparent rounded-full blur-[65px] pointer-events-none"></div>
 
-      <!-- Top Status Bar with VOZX.AI (9:41, VOZX.AI Capsule, Cellular, Wifi, Battery) -->
+      <!-- Top Status Bar with VOZX.AI Capsule (9:41, Cellular, Wifi, Battery) -->
       <div class="relative z-30 pt-3.5 px-6 pb-1 flex items-center justify-between text-xs text-slate-300 font-semibold select-none">
         <span class="tracking-tight text-white font-mono text-[13px]">9:41</span>
         
-        <!-- Center Top Capsule: VOZX.AI -->
+        <!-- Center Top Dynamic Capsule: VOZX.AI -->
         <div class="flex items-center justify-center gap-1.5 px-3 py-1 rounded-full bg-black/85 border border-[#00E599]/40 text-[#00E599] text-[10px] font-mono tracking-widest font-black shadow-[0_0_15px_rgba(0,229,153,0.35)]">
           <span class="w-1.5 h-1.5 rounded-full bg-[#00E599] animate-pulse"></span>
           <span>VOZX.AI</span>
@@ -162,6 +142,23 @@
           <div class="w-5 h-2.5 rounded-sm border border-white p-0.5 flex items-center">
             <div class="h-full w-3.5 bg-white rounded-2xs"></div>
           </div>
+        </div>
+      </div>
+
+      <!-- Top Device Header: Brand + Quick Switcher on TOP OF THE DEVICE -->
+      <div class="relative z-30 px-5 pt-1.5 pb-2 flex items-center justify-between border-b border-white/5">
+        <div class="flex items-center gap-1.5">
+          <div class="w-2 h-2 rounded-full bg-[#00E599] animate-ping"></div>
+          <span class="text-xs font-black font-mono tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#00E599] via-[#00D2B4] to-[#00C2FF]">VOZX.AI</span>
+          <span class="text-[10px] text-slate-400 font-mono">CyberGuard</span>
+        </div>
+
+        <!-- Quick Tabs on top of the device inside the phone screen -->
+        <div class="flex items-center gap-1 text-[10px] font-semibold bg-black/60 p-0.5 rounded-full border border-slate-800">
+          <button onclick="navigateScreen('splash')" id="tab-btn-splash" class="px-2 py-0.5 rounded-full text-slate-400 hover:text-white transition">Splash</button>
+          <button onclick="navigateScreen('dashboard')" id="tab-btn-dashboard" class="px-2 py-0.5 rounded-full bg-[#00D2B4]/20 text-[#00E599] border border-[#00E599]/40 transition">Shield</button>
+          <button onclick="navigateScreen('scan')" id="tab-btn-scan" class="px-2 py-0.5 rounded-full text-slate-400 hover:text-white transition">Scan</button>
+          <button onclick="navigateScreen('emergency')" id="tab-btn-emergency" class="px-2 py-0.5 rounded-full text-red-400 hover:text-red-300 transition">SOS</button>
         </div>
       </div>
 
@@ -687,8 +684,8 @@
       const target = document.getElementById('screen-' + screenId);
       if (target) target.classList.remove('hidden');
 
-      // Update Desktop switcher tabs
-      document.querySelectorAll('.desktop-screen-switcher button').forEach(btn => {
+      // Update top device switcher tabs
+      document.querySelectorAll('[id^="tab-btn-"]').forEach(btn => {
         btn.classList.remove('bg-[#00D2B4]/20', 'text-[#00E599]', 'border', 'border-[#00E599]/40');
         btn.classList.add('text-slate-400');
       });

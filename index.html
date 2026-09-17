@@ -124,30 +124,8 @@
       <!-- Top Ambient Teal Glow Effect -->
       <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-80 h-52 bg-gradient-to-b from-[#00E599]/25 to-transparent rounded-full blur-[65px] pointer-events-none"></div>
 
-      <!-- Top Status Bar (9:41, Center Dynamic Island VOZX.AI, Headphone, Wifi, Battery) -->
-      <div class="relative z-30 pt-3 px-6 pb-2 flex items-center justify-between text-xs text-slate-300 font-semibold select-none">
-        <span class="tracking-tight text-white font-mono text-[13px] font-bold">9:41</span>
-        
-        <!-- Center Top Dynamic Island: VOZX.AI (Clicking reloads page) -->
-        <button onclick="window.location.reload()" title="Click to reload page" class="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-black/95 border border-[#00E599]/60 shadow-[0_0_15px_rgba(0,229,153,0.45)] cursor-pointer active:scale-95 transition-all group">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#00E599] animate-pulse"></span>
-          <span class="text-[10px] font-bold font-mono tracking-wider text-[#00E599] group-hover:text-white transition-colors">VOZX.AI</span>
-        </button>
-
-        <div class="flex items-center gap-1.5 text-white">
-          <!-- Tether / Headphone arc icon -->
-          <svg class="w-3.5 h-3.5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4a8 8 0 00-8 8v6a2 2 0 002 2h1a1 1 0 001-1v-4a1 1 0 00-1-1H5a6 6 0 1112 0h-2a1 1 0 00-1 1v4a1 1 0 001 1h1a2 2 0 002-2v-6a8 8 0 00-8-8z"/></svg>
-          <!-- Wifi -->
-          <svg class="w-3.5 h-3.5 fill-current text-white" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98A16.88 16.88 0 0012 4z"/></svg>
-          <!-- Battery -->
-          <div class="w-5 h-2.5 rounded-sm border border-white p-0.5 flex items-center">
-            <div class="h-full w-3.5 bg-white rounded-2xs"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Top App Header Bar (Matching media_1789625080582.png: Clickable Logo + VOZX AI + Tabs) -->
-      <div class="relative z-30 px-4 pt-1 pb-1.5 flex items-center justify-between select-none">
+      <!-- Top App Header Bar (Matching media_1789625575783.png: Clickable Logo + VOZX AI + Tabs) -->
+      <div class="relative z-30 px-5 pt-4 pb-2 flex items-center justify-between select-none">
         <!-- Left: Clickable Logo + Name (Reloads on click) -->
         <button onclick="window.location.reload()" title="Click logo to reload page" class="flex items-center gap-2.5 group cursor-pointer active:scale-95 transition-transform text-left">
           <img src="logo.png" alt="VOZX AI" class="w-8 h-8 rounded-xl object-contain drop-shadow-[0_0_8px_rgba(0,194,255,0.4)]">

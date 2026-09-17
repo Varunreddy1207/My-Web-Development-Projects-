@@ -143,6 +143,26 @@
         </div>
       </div>
 
+      <!-- Top App Header Bar (Matching uploaded design: Clickable Logo + VOZX AI + Tabs) -->
+      <div class="relative z-30 px-4 pt-1.5 pb-2 flex items-center justify-between border-b border-white/5 select-none">
+        <!-- Left: Clickable Logo + Name (Reloads on click) -->
+        <button onclick="window.location.reload()" title="Click logo to reload page" class="flex items-center gap-2 group cursor-pointer active:scale-95 transition-transform text-left">
+          <img src="logo.png" alt="VOZX AI" class="w-8 h-8 rounded-xl object-contain shadow-[0_0_12px_rgba(0,194,255,0.4)] border border-cyan-400/40 group-hover:border-cyan-300 transition-all">
+          <div class="flex flex-col">
+            <span class="text-[13px] font-bold font-mono tracking-wider text-[#00D2B4] leading-tight">VOZX AI</span>
+            <span class="text-[10px] text-slate-400 font-mono leading-none">CyberGuard</span>
+          </div>
+        </button>
+
+        <!-- Right: Capsule Screen Switcher -->
+        <div class="flex items-center gap-1 text-[11px] font-medium bg-black/60 py-1 px-1.5 rounded-full border border-slate-800 shadow-inner">
+          <button onclick="navigateScreen('splash')" id="tab-btn-splash" class="px-2.5 py-0.5 rounded-full text-slate-400 hover:text-white transition">Splash</button>
+          <button onclick="navigateScreen('dashboard')" id="tab-btn-dashboard" class="px-2.5 py-0.5 rounded-full bg-[#00D2B4]/20 text-[#00E599] border border-[#00E599]/40 font-semibold transition">Shield</button>
+          <button onclick="navigateScreen('scan')" id="tab-btn-scan" class="px-2.5 py-0.5 rounded-full text-slate-400 hover:text-white transition">Scan</button>
+          <button onclick="navigateScreen('emergency')" id="tab-btn-emergency" class="px-2.5 py-0.5 rounded-full text-red-400 hover:text-red-300 font-semibold transition">SOS</button>
+        </div>
+      </div>
+
       <!-- ============================================== -->
       <!-- SCREEN 1: ONBOARDING / SPLASH (Left phone in image) -->
       <!-- ============================================== -->

@@ -124,12 +124,12 @@
       <!-- Top Ambient Teal Glow Effect -->
       <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-80 h-52 bg-gradient-to-b from-[#00E599]/25 to-transparent rounded-full blur-[65px] pointer-events-none"></div>
 
-      <!-- Top Status Bar with VOZX AI Capsule (9:41, Cellular, Wifi, Battery) -->
-      <div class="relative z-30 pt-3.5 px-6 pb-1 flex items-center justify-between text-xs text-slate-300 font-semibold select-none">
+      <!-- Top Status Bar (9:41, Center Camera Punch Hole, Cellular, Wifi, Battery) -->
+      <div class="relative z-30 pt-3.5 px-6 pb-2 flex items-center justify-between text-xs text-slate-300 font-semibold select-none">
         <span class="tracking-tight text-white font-mono text-[13px]">9:41</span>
         
         <!-- Center Camera Punch Hole -->
-        <div class="w-3.5 h-3.5 rounded-full bg-black/90 border border-slate-700/60 shadow-inner"></div>
+        <div class="w-3.5 h-3.5 rounded-full bg-black border border-slate-700/60 shadow-inner"></div>
 
         <div class="flex items-center gap-1.5 text-white">
           <!-- Cellular -->
@@ -140,22 +140,6 @@
           <div class="w-5 h-2.5 rounded-sm border border-white p-0.5 flex items-center">
             <div class="h-full w-3.5 bg-white rounded-2xs"></div>
           </div>
-        </div>
-      </div>
-
-      <!-- Top Device Header: Logo + Quick Switcher on TOP OF THE DEVICE -->
-      <div class="relative z-30 px-4 pt-1.5 pb-2 flex items-center justify-between border-b border-white/5">
-        <!-- Clickable Brand Logo: Clicking reloads page -->
-        <button onclick="window.location.reload()" title="Click logo to reload page" class="cursor-pointer active:scale-95 transition-all group">
-          <img src="logo.png" alt="Logo" class="w-8 h-8 rounded-xl object-contain shadow-[0_0_14px_rgba(0,194,255,0.45)] border border-cyan-400/40 group-hover:border-cyan-300 group-hover:shadow-[0_0_18px_rgba(0,194,255,0.7)] transition-all">
-        </button>
-
-        <!-- Quick Tabs on top of the device inside the phone screen -->
-        <div class="flex items-center gap-1 text-[10px] font-semibold bg-black/60 p-0.5 rounded-full border border-slate-800">
-          <button onclick="navigateScreen('splash')" id="tab-btn-splash" class="px-2 py-0.5 rounded-full text-slate-400 hover:text-white transition">Splash</button>
-          <button onclick="navigateScreen('dashboard')" id="tab-btn-dashboard" class="px-2 py-0.5 rounded-full bg-[#00D2B4]/20 text-[#00E599] border border-[#00E599]/40 transition">Shield</button>
-          <button onclick="navigateScreen('scan')" id="tab-btn-scan" class="px-2 py-0.5 rounded-full text-slate-400 hover:text-white transition">Scan</button>
-          <button onclick="navigateScreen('emergency')" id="tab-btn-emergency" class="px-2 py-0.5 rounded-full text-red-400 hover:text-red-300 transition">SOS</button>
         </div>
       </div>
 

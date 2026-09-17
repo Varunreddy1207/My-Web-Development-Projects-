@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CyberGuard — Phishing Attack Shield & Safety Assistant</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+    :root {
+      --bg-dark: #030D1A;
+      --cyber-teal: #00D2B4;
+      --cyber-green: #00E599;
+      --cyber-cyan: #00C2FF;
+      --warning-yellow: #FFC107;
+      --danger-red: #FF3B5C;
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #E2E8F0;
+      color: #F8FAFC;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Screen container background matching uploaded design */
+    .cyber-bg {
+      background: linear-gradient(180deg, #051818 0%, #03121E 35%, #020C17 70%, #010811 100%);
+    }
+
+    /* Glassmorphism Cards */
+    .cyber-card {
+      background: rgba(8, 24, 38, 0.75);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(0, 229, 153, 0.12);
+      border-radius: 24px;
+    }
+
+    .cyber-card-active {
+      background: linear-gradient(135deg, rgba(0, 210, 180, 0.22) 0%, rgba(8, 28, 44, 0.85) 100%);
+      border: 1px solid rgba(0, 229, 153, 0.35);
+    }
+
+    /* Glowing arc styling */
+    .arc-glow {
+      filter: drop-shadow(0 0 16px rgba(0, 229, 153, 0.75));
+    }
+
+    .shield-glow {
+      filter: drop-shadow(0 0 25px rgba(0, 210, 180, 0.8));
+    }
+
+    /* Waveform Animation */
+    @keyframes waveFlow {
+      0% { transform: translateY(0px) scaleY(1); }
+      50% { transform: translateY(-4px) scaleY(1.2); }
+      100% { transform: translateY(0px) scaleY(1); }
+    }
+
+    @keyframes pulseRing {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 20px rgba(0, 229, 153, 0.9)); }
+    }
+
+    .animate-pulse-ring {
+      animation: pulseRing 3.5s infinite ease-in-out;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Mobile handling: edge-to-edge on smartphone screens */
+    @media (max-width: 640px) {
+      body {
+        background-color: #020C17;
+      }
+      .mockup-outer {
+        width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        border-radius: 0px !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+      }
+      .mockup-inner {
+        border-radius: 0px !important;
+      }
+      .desktop-screen-switcher {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-0 sm:p-6 bg-slate-200">
+
+  <!-- Desktop Presentation Switcher & Info -->
+  <div class="desktop-screen-switcher w-full max-w-md flex items-center justify-between py-2.5 px-4 mb-3 bg-slate-900/90 text-white rounded-2xl shadow-xl backdrop-blur-md">
+    <div class="flex items-center gap-2">
+      <div class="w-2.5 h-2.5 rounded-full bg-[#00E599] animate-ping"></div>
+      <span class="text-xs font-extrabold font-mono tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#00E599] via-[#00D2B4] to-[#00C2FF]">VOZX.AI</span>
+      <span class="text-[10px] text-slate-400 font-mono">CyberGuard</span>
+    </div>
+
+    <!-- Quick Navigation between the 3 showcased screens in the prompt -->
+    <div class="flex items-center gap-1.5 text-[11px] font-semibold">
+      <button onclick="navigateScreen('splash')" id="tab-btn-splash" class="px-2.5 py-1 rounded-xl text-slate-400 hover:text-white transition">Splash</button>
+      <button onclick="navigateScreen('dashboard')" id="tab-btn-dashboard" class="px-2.5 py-1 rounded-xl bg-[#00D2B4]/20 text-[#00E599] border border-[#00E599]/40 transition">Dashboard</button>
+      <button onclick="navigateScreen('scan')" id="tab-btn-scan" class="px-2.5 py-1 rounded-xl text-slate-400 hover:text-white transition">Check Links</button>
+      <button onclick="navigateScreen('emergency')" id="tab-btn-emergency" class="px-2.5 py-1 rounded-xl text-red-400 hover:text-red-300 transition">SOS</button>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- PHONE MOCKUP FRAME (Exact proportions of uploaded UI) -->
+  <!-- ============================================== -->
+  <div id="phoneDevice" class="mockup-outer relative w-[385px] h-[835px] bg-[#020B14] rounded-[48px] p-[10px] shadow-[0_25px_80px_rgba(0,0,0,0.5),0_0_50px_rgba(0,210,180,0.15)] border-[5px] border-slate-800/90 transition-all">
+
+    <!-- Phone Inner Glass Screen -->
+    <div class="mockup-inner relative w-full h-full cyber-bg rounded-[40px] overflow-hidden flex flex-col justify-between select-none">
+      
+      <!-- Top Ambient Teal Glow Effect -->
+      <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-80 h-52 bg-gradient-to-b from-[#00E599]/25 to-transparent rounded-full blur-[65px] pointer-events-none"></div>
+
+      <!-- Top Status Bar with VOZX.AI (9:41, VOZX.AI Capsule, Cellular, Wifi, Battery) -->
+      <div class="relative z-30 pt-3.5 px-6 pb-1 flex items-center justify-between text-xs text-slate-300 font-semibold select-none">
+        <span class="tracking-tight text-white font-mono text-[13px]">9:41</span>
+        
+        <!-- Center Top Capsule: VOZX.AI -->
+        <div class="flex items-center justify-center gap-1.5 px-3 py-1 rounded-full bg-black/85 border border-[#00E599]/40 text-[#00E599] text-[10px] font-mono tracking-widest font-black shadow-[0_0_15px_rgba(0,229,153,0.35)]">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#00E599] animate-pulse"></span>
+          <span>VOZX.AI</span>
+        </div>
+
+        <div class="flex items-center gap-1.5 text-white">
+          <!-- Cellular -->
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 18.25C2.9 16.5 2 14.36 2 12 2 6.48 6.48 2 12 2s10 4.48 10 10c0 2.36-.9 4.5-2.35 6.25l-.62-.64C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"/></svg>
+          <!-- Wifi -->
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98A16.88 16.88 0 0012 4z"/></svg>
+          <!-- Battery -->
+          <div class="w-5 h-2.5 rounded-sm border border-white p-0.5 flex items-center">
+            <div class="h-full w-3.5 bg-white rounded-2xs"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 1: ONBOARDING / SPLASH (Left phone in image) -->
+      <!-- ============================================== -->
+      <div id="screen-splash" class="app-screen hidden relative z-20 flex-1 flex flex-col justify-between px-6 pt-6 pb-8 text-center">
+        
+        <!-- Top Arch Light Line with Stars -->
+        <div class="relative w-full h-16 flex items-center justify-center">
+          <svg class="w-full h-16 opacity-60" viewBox="0 0 300 60" fill="none">
+            <path d="M10 50 Q 150 -10 290 50" stroke="url(#lineGrad)" stroke-width="1.5" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#00D2B4" stop-opacity="0"/>
+                <stop offset="50%" stop-color="#00E599" stop-opacity="0.8"/>
+                <stop offset="100%" stop-color="#00C2FF" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <!-- Sparkle Stars -->
+          <div class="absolute top-2 left-6 text-[#00E599] text-xs animate-pulse">✦</div>
+          <div class="absolute top-1 right-8 text-[#00D2B4] text-xs animate-pulse [animation-delay:0.5s]">✦</div>
+        </div>
+
+        <!-- Center Umbrella Shield Silhouette + AI Badge -->
+        <div class="relative w-48 h-48 mx-auto my-auto flex flex-col items-center justify-center">
+          <!-- Umbrella & Shield Silhouette Graphic -->
+          <div class="relative w-40 h-40 flex items-center justify-center">
+            <!-- Subtle Umbrella Top Outline -->
+            <svg class="absolute -top-2 w-32 h-20 text-emerald-950/70" viewBox="0 0 100 60" fill="currentColor">
+              <path d="M50 0 C20 0 0 25 0 50 C15 45 35 45 50 50 C65 45 85 45 100 50 C100 25 80 0 50 0 Z"/>
+            </svg>
+
+            <!-- Glowing Center Shield -->
+            <div class="animate-pulse-ring relative z-10 w-20 h-24 rounded-2xl bg-gradient-to-b from-[#00D2B4]/20 via-[#07242E] to-[#03131A] border border-[#00E599]/60 flex flex-col items-center justify-center shield-glow">
+              <svg class="w-10 h-10 text-[#00E599]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+              </svg>
+              <span class="text-[9px] font-black text-white tracking-wider mt-0.5">AI</span>
+            </div>
+          </div>
+
+          <!-- Headline & Description -->
+          <div class="mt-6 space-y-3">
+            <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug">
+              CyberGuard Phishing <br>
+              Attack Shield
+            </h1>
+            <p class="text-xs text-slate-400 max-w-[260px] mx-auto leading-relaxed">
+              With CyberGuard, organizations avoid costly breaches and cyber threats.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Cyber Speed Highway Curves & Black Circle Arrow Button -->
+        <div class="relative w-full pt-4">
+          <!-- Cyber Light Road Graphic -->
+          <div class="absolute -bottom-8 left-0 right-0 h-32 pointer-events-none opacity-80 overflow-hidden">
+            <svg class="w-full h-full" viewBox="0 0 350 120" fill="none">
+              <path d="M-20 120 C80 60 200 40 370 120" stroke="#00D2B4" stroke-width="2" opacity="0.7"/>
+              <path d="M-40 130 C90 70 210 50 390 130" stroke="#00C2FF" stroke-width="4" opacity="0.5"/>
+              <path d="M30 120 C110 80 180 65 300 120" stroke="#00E599" stroke-width="1.5" opacity="0.8"/>
+            </svg>
+          </div>
+
+          <!-- Center Round Arrow Button -->
+          <button onclick="navigateScreen('dashboard')" class="relative z-10 w-14 h-14 mx-auto rounded-full bg-black border border-slate-700/80 text-white flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all group">
+            <svg class="w-5 h-5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 2: MAIN DASHBOARD (Center phone in image) -->
+      <!-- ============================================== -->
+      <div id="screen-dashboard" class="app-screen relative z-20 flex-1 overflow-y-auto no-scrollbar px-4 pt-2 pb-20 space-y-4">
+        
+        <!-- Header: Profile Pic (Men), Welcome Back, Name & Notification Bell -->
+        <div class="flex items-center justify-between pt-1">
+          <div class="flex items-center gap-3">
+            <!-- Profile Photo (Men Avatar) - Clicking opens Edit Profile -->
+            <button onclick="openEditProfileModal()" title="Click to Edit Profile" class="relative group active:scale-95 transition-all">
+              <img id="userAvatarImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" alt="Varun" class="w-11 h-11 rounded-full object-cover border-2 border-[#00E599]/60 shadow-md shadow-[#00E599]/20">
+              <!-- Edit Badge -->
+              <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#00D2B4] text-black flex items-center justify-center text-[8px] font-bold shadow">
+                ✎
+              </span>
+            </button>
+
+            <div>
+              <span class="text-[11px] text-slate-400 block font-medium">Welcome Back</span>
+              <div class="flex items-center gap-1.5">
+                <h2 id="userDisplayName" class="text-sm font-bold text-white tracking-wide">Varun M.</h2>
+                <button onclick="openEditProfileModal()" class="text-[10px] text-[#00E599] hover:underline font-mono">Edit</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bell Notification Button -->
+          <button onclick="alert('Notification: AI Protection is active. 365 links evaluated today with 0 breaches.')" class="w-9 h-9 rounded-full bg-[#081C2A] border border-slate-700/60 flex items-center justify-center text-slate-300 hover:text-white transition active:scale-95">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Protection Pill: "Protection AI CyberGuard is Active" -->
+        <div class="cyber-card px-3.5 py-2 rounded-full flex items-center gap-2.5 text-xs text-slate-300 border border-[#00E599]/20">
+          <div class="w-5 h-5 rounded-full bg-[#00E599]/20 text-[#00E599] flex items-center justify-center text-[10px]">
+            🔒
+          </div>
+          <span class="text-[11px] font-medium text-slate-200">Protection AI CyberGuard is Active</span>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- CENTER ARC GAUGE METER: "365 /day Total Link Scanned" -->
+        <!-- ========================================== -->
+        <div class="relative w-full py-4 flex flex-col items-center justify-center">
+          
+          <!-- Background Ambient Arc Glow -->
+          <div class="absolute top-8 w-56 h-28 bg-[#00E599]/15 rounded-t-full blur-2xl pointer-events-none"></div>
+
+          <div class="relative w-64 h-36 flex items-center justify-center overflow-hidden">
+            <!-- SVG Semi-Circular Arc -->
+            <svg class="w-64 h-64 -mt-16 transform" viewBox="0 0 200 200">
+              <!-- Background track arc -->
+              <path d="M 25 100 A 75 75 0 0 1 175 100" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14" stroke-linecap="round"/>
+              <!-- Foreground glowing active arc -->
+              <path d="M 25 100 A 75 75 0 0 1 175 100" fill="none" stroke="url(#arcGradient)" stroke-width="14" stroke-linecap="round" class="arc-glow"/>
+              
+              <defs>
+                <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#00C2FF"/>
+                  <stop offset="50%" stop-color="#00D2B4"/>
+                  <stop offset="100%" stop-color="#00E599"/>
+                </linearGradient>
+              </defs>
+            </svg>
+
+            <!-- Inside Center Text -->
+            <div class="absolute bottom-4 flex flex-col items-center text-center">
+              <div class="flex items-baseline gap-1">
+                <span id="scannedLinksCount" class="text-3xl font-extrabold text-white font-mono tracking-tight">365</span>
+                <span class="text-xs text-slate-400 font-semibold">/day</span>
+              </div>
+              <span class="text-[11px] text-slate-300 font-medium tracking-wide mt-0.5">Total Link Scanned</span>
+            </div>
+          </div>
+
+          <!-- Fine network horizontal lines under arc -->
+          <div class="w-full h-4 opacity-30 flex items-center justify-center gap-1 overflow-hidden -mt-1">
+            <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-[#00E599] to-transparent"></div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 3 METRIC PILLS: Critical, High, Medium -->
+        <!-- ========================================== -->
+        <div class="grid grid-cols-3 gap-2">
+          
+          <!-- Critical -->
+          <div class="cyber-card p-3 flex flex-col justify-between text-left group">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-bold text-slate-200">Critical</span>
+              <span class="w-4 h-4 rounded-full bg-[#00D2B4]/20 text-[#00E599] flex items-center justify-center text-[9px]">▲</span>
+            </div>
+            <div class="mt-1">
+              <span class="text-xs font-bold text-white block">89 Link</span>
+              <span class="text-[10px] text-[#00E599] font-mono font-semibold">+15%</span>
+            </div>
+          </div>
+
+          <!-- High -->
+          <div class="cyber-card p-3 flex flex-col justify-between text-left group">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-bold text-slate-200">High</span>
+              <span class="w-4 h-4 rounded-full bg-[#00D2B4]/20 text-[#00E599] flex items-center justify-center text-[9px]">▲</span>
+            </div>
+            <div class="mt-1">
+              <span class="text-xs font-bold text-white block">95 Link</span>
+              <span class="text-[10px] text-[#00E599] font-mono font-semibold">+10%</span>
+            </div>
+          </div>
+
+          <!-- Medium -->
+          <div class="cyber-card p-3 flex flex-col justify-between text-left group">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-bold text-slate-200">Medium</span>
+            </div>
+            <div class="mt-1">
+              <span class="text-xs font-bold text-white block">150 Link</span>
+              <span class="text-[10px] text-slate-400 font-mono">Stable</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- STATISTICAL SUMMARY CARD -->
+        <!-- ========================================== -->
+        <div class="cyber-card p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white">Statistical Summary</h3>
+            <button onclick="navigateScreen('scan')" class="text-[10px] text-slate-400 hover:text-white transition">See all</button>
+          </div>
+
+          <!-- List item 1: Daily Scanned -->
+          <div class="cyber-card p-3 rounded-2xl flex items-center justify-between border-slate-800/80 bg-[#071724]/90">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl bg-slate-800/80 text-slate-300 flex items-center justify-center text-xs">
+                📅
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white">Daily Scanned</h4>
+                <span class="text-[10px] text-slate-400 font-mono">Today, 11.30</span>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-[#00C2FF] font-mono">550 Links</span>
+          </div>
+
+          <!-- List item 2: Weekly Scanned -->
+          <div class="cyber-card p-3 rounded-2xl flex items-center justify-between border-slate-800/80 bg-[#071724]/90">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl bg-slate-800/80 text-slate-300 flex items-center justify-center text-xs">
+                📅
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white">Weekly Scanned</h4>
+                <span class="text-[10px] text-slate-400 font-mono">Today, 11.30</span>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-[#00C2FF] font-mono">1,570 Links</span>
+          </div>
+
+          <!-- List item 3: Monthly Scanned -->
+          <div class="cyber-card p-3 rounded-2xl flex items-center justify-between border-slate-800/80 bg-[#071724]/90">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl bg-slate-800/80 text-slate-300 flex items-center justify-center text-xs">
+                📅
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white">Monthly Scanned</h4>
+                <span class="text-[10px] text-slate-400 font-mono">Today, 11.30</span>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-[#00C2FF] font-mono">6,102 Links</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 3: CHECK LINKS / SCAN (Right phone in image) -->
+      <!-- ============================================== -->
+      <div id="screen-scan" class="app-screen hidden relative z-20 flex-1 overflow-y-auto no-scrollbar px-4 pt-2 pb-20 space-y-4">
+        
+        <!-- Header: Back Arrow & "Check Links" -->
+        <div class="flex items-center justify-between pt-1">
+          <button onclick="navigateScreen('dashboard')" class="w-8 h-8 rounded-full bg-[#081C2A] text-slate-300 flex items-center justify-center hover:text-white">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
+            </svg>
+          </button>
+          <h2 class="text-sm font-bold text-white tracking-wide">Check Links</h2>
+          <div class="w-8"></div>
+        </div>
+
+        <!-- Glowing Shield Crest with flowing waves -->
+        <div class="relative w-full h-24 flex items-center justify-center my-1">
+          <!-- Ambient Glow behind crest -->
+          <div class="absolute inset-0 bg-[#00E599]/15 blur-2xl rounded-full pointer-events-none"></div>
+
+          <!-- Flowing teal ribbon waves -->
+          <svg class="absolute w-full h-20 opacity-70" viewBox="0 0 320 80" fill="none">
+            <path d="M0 45 Q 160 5 320 45" stroke="#00D2B4" stroke-width="1.8" opacity="0.6"/>
+            <path d="M20 50 Q 160 20 300 50" stroke="#00E599" stroke-width="1.2" opacity="0.7"/>
+            <path d="M0 35 Q 160 65 320 35" stroke="#00C2FF" stroke-width="1.5" opacity="0.5"/>
+          </svg>
+
+          <!-- Circular Shield Icon with lock -->
+          <div class="relative z-10 w-14 h-14 rounded-full bg-gradient-to-b from-[#00D2B4]/30 via-[#07242E] to-[#021017] border-2 border-[#00E599] flex items-center justify-center shield-glow shadow-[0_0_25px_rgba(0,229,153,0.6)]">
+            <svg class="w-7 h-7 text-[#00E599]" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm0 5c1.66 0 3 1.34 3 3v1h1v5H8v-5h1v-1c0-1.66 1.34-3 3-3zm-1 3v1h2v-1c0-.55-.45-1-1-1s-1 .45-1 1z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Scan Link Here Input Card -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-white block">Scan Link Here</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-3.5 flex items-center pointer-events-none text-slate-400">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+            </div>
+            <input id="urlInputVal" type="text" value="www.ptomodiskon.net" placeholder="Paste link here..." class="w-full bg-[#071B2B] text-xs text-slate-200 pl-10 pr-16 py-3 rounded-2xl border border-slate-700/80 focus:border-[#00E599] focus:outline-none transition">
+            <button onclick="analyzeLinkAction()" class="absolute right-2 top-1.5 bottom-1.5 px-3 bg-[#00E599] hover:bg-[#00D2B4] text-black text-xs font-bold rounded-xl transition active:scale-95">
+              Scan
+            </button>
+          </div>
+        </div>
+
+        <!-- Link Scan Result Card (Exact visual from right phone) -->
+        <div class="space-y-2 pt-1">
+          <h3 class="text-xs font-bold text-white">Link Scan Result</h3>
+
+          <div class="cyber-card p-4 rounded-3xl border border-slate-800 space-y-3.5 bg-[#061522]">
+            
+            <!-- Curved Planet Horizon Image (Exact from reference) -->
+            <div class="relative w-full h-28 rounded-2xl overflow-hidden border border-slate-700/60 shadow-inner">
+              <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80" alt="Cyber Grid Horizon" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#061522] via-transparent to-transparent"></div>
+            </div>
+
+            <!-- Warning Header with Yellow Icon -->
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center font-bold text-sm shadow">
+                ⚠️
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white">Warning</h4>
+                <span id="resultUrlLabel" class="text-[11px] text-slate-400 font-mono">www.ptomodiskon.net</span>
+              </div>
+            </div>
+
+            <!-- Bullet Points list -->
+            <div class="space-y-2 pt-1 text-[11px] text-slate-300">
+              <div class="flex items-start gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 shrink-0"></span>
+                <span>Domain registered less than 30 days</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 shrink-0"></span>
+                <span>URL Has a phishing-like pattern</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 shrink-0"></span>
+                <span>There is a history of reports from other users</span>
+              </div>
+            </div>
+
+            <!-- Block Link Button (Dark glass button with subtle border) -->
+            <button onclick="blockLinkAction()" id="blockBtnText" class="w-full py-3 rounded-2xl bg-[#081E2E] hover:bg-[#0C2A40] text-slate-200 font-bold text-xs border border-slate-700/80 active:scale-[0.98] transition">
+              Block Link
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 4: EMERGENCY SOS SCREEN -->
+      <!-- ============================================== -->
+      <div id="screen-emergency" class="app-screen hidden relative z-20 flex-1 overflow-y-auto no-scrollbar px-4 pt-2 pb-20 space-y-4 text-center">
+        <div class="flex items-center justify-between pt-1">
+          <button onclick="navigateScreen('dashboard')" class="w-8 h-8 rounded-full bg-[#081C2A] text-slate-300 flex items-center justify-center hover:text-white">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+          </button>
+          <h2 class="text-sm font-bold text-red-400 uppercase tracking-wide">Emergency SOS Protocol</h2>
+          <div class="w-8"></div>
+        </div>
+
+        <div class="cyber-card p-6 border-red-500/40 bg-gradient-to-b from-red-950/30 to-[#051420]">
+          <span class="text-[10px] font-mono text-red-300 uppercase tracking-widest block mb-2">1-Touch Cellular Panic Signal</span>
+
+          <!-- Huge SOS Button -->
+          <div class="relative w-40 h-40 mx-auto my-3 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full border-2 border-red-500/30 animate-ping opacity-40"></div>
+            <button id="sosEmergencyTrigger" onmousedown="startSosHold()" onmouseup="stopSosHold()" ontouchstart="startSosHold()" ontouchend="stopSosHold()" class="relative z-10 w-32 h-32 rounded-full bg-gradient-to-b from-red-500 to-red-700 text-white font-black text-lg border-4 border-red-400 shadow-[0_0_40px_rgba(255,59,92,0.8)] active:scale-95 transition-all">
+              <span id="sosCountdownLabel">HOLD SOS</span>
+            </button>
+          </div>
+
+          <p id="sosAlertStatus" class="text-xs text-slate-300 mt-2">
+            Hold 3 seconds to broadcast live GPS coordinates to Police (112) and saved family.
+          </p>
+        </div>
+
+        <!-- Quick 1-Tap Calling Grid -->
+        <div class="grid grid-cols-2 gap-2 text-left">
+          <button onclick="alert('Dialing Police (112)... Broadcast coordinates attached.')" class="cyber-card p-3 rounded-2xl flex items-center gap-2.5 border-red-500/30 hover:border-red-400 transition">
+            <span class="text-lg">🚓</span>
+            <div>
+              <h5 class="text-xs font-bold text-white">Call Police</h5>
+              <span class="text-[10px] text-red-400 font-mono">112 / 911</span>
+            </div>
+          </button>
+          <button onclick="alert('Dispatching Medical Trauma Ambulance (108)...')" class="cyber-card p-3 rounded-2xl flex items-center gap-2.5 border-red-500/30 hover:border-red-400 transition">
+            <span class="text-lg">🚑</span>
+            <div>
+              <h5 class="text-xs font-bold text-white">Ambulance</h5>
+              <span class="text-[10px] text-red-400 font-mono">108 / EMS</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- BOTTOM NAVIGATION BAR (Home, Scan, History, Settings) -->
+      <!-- ============================================== -->
+      <nav class="relative z-30 px-4 pb-3 pt-1">
+        <div class="cyber-card rounded-full p-1.5 flex items-center justify-around border border-[#00E599]/25 shadow-2xl bg-[#04121F]/90">
+          
+          <!-- Tab 1: Home -->
+          <button onclick="navigateScreen('dashboard')" id="nav-item-dashboard" class="nav-tab flex flex-col items-center justify-center py-1.5 px-3 rounded-full text-[#00E599] transition-all">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
+            </svg>
+            <span class="text-[9px] font-semibold mt-0.5">Home</span>
+          </button>
+
+          <!-- Tab 2: Scan -->
+          <button onclick="navigateScreen('scan')" id="nav-item-scan" class="nav-tab flex flex-col items-center justify-center py-1.5 px-3 rounded-full text-slate-400 hover:text-white transition-all">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z"/>
+            </svg>
+            <span class="text-[9px] font-semibold mt-0.5">Scan</span>
+          </button>
+
+          <!-- Tab 3: History -->
+          <button onclick="alert('Scan History: 365 links evaluated. 0 malicious domains bypassed.')" class="nav-tab flex flex-col items-center justify-center py-1.5 px-3 rounded-full text-slate-400 hover:text-white transition-all">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+            </svg>
+            <span class="text-[9px] font-semibold mt-0.5">History</span>
+          </button>
+
+          <!-- Tab 4: Settings (Opens Edit Profile) -->
+          <button onclick="openEditProfileModal()" class="nav-tab flex flex-col items-center justify-center py-1.5 px-3 rounded-full text-slate-400 hover:text-white transition-all">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span class="text-[9px] font-semibold mt-0.5">Settings</span>
+          </button>
+
+        </div>
+
+        <!-- Android 16 Gesture Pill -->
+        <div class="w-32 h-1 bg-slate-500/50 rounded-full mx-auto mt-2"></div>
+      </nav>
+
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- EDIT PROFILE MODAL (Fulfills explicit request) -->
+  <!-- ============================================== -->
+  <div id="editProfileModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="w-full max-w-sm cyber-card p-6 border border-[#00E599]/40 bg-[#04121F] rounded-3xl space-y-4 text-left shadow-2xl">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+          <span class="text-[#00E599]">✎</span> Edit Profile Details
+        </h3>
+        <button onclick="closeEditProfileModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center text-xs">✕</button>
+      </div>
+
+      <!-- Change Profile Pic to Men Selector -->
+      <div class="text-center space-y-2">
+        <span class="text-[11px] font-semibold text-slate-300 block">Choose Avatar (Male Profiles)</span>
+        
+        <div class="flex items-center justify-center gap-2.5 pt-1">
+          <!-- Option 1 (Selected default) -->
+          <button onclick="selectAvatar('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80')" class="w-12 h-12 rounded-full border-2 border-[#00E599] overflow-hidden focus:ring-2 focus:ring-[#00E599]">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" alt="Male 1" class="w-full h-full object-cover">
+          </button>
+
+          <!-- Option 2 -->
+          <button onclick="selectAvatar('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80')" class="w-12 h-12 rounded-full border-2 border-slate-700 overflow-hidden hover:border-[#00E599] focus:ring-2 focus:ring-[#00E599]">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" alt="Male 2" class="w-full h-full object-cover">
+          </button>
+
+          <!-- Option 3 -->
+          <button onclick="selectAvatar('https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80')" class="w-12 h-12 rounded-full border-2 border-slate-700 overflow-hidden hover:border-[#00E599] focus:ring-2 focus:ring-[#00E599]">
+            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80" alt="Male 3" class="w-full h-full object-cover">
+          </button>
+
+          <!-- Option 4 -->
+          <button onclick="selectAvatar('https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80')" class="w-12 h-12 rounded-full border-2 border-slate-700 overflow-hidden hover:border-[#00E599] focus:ring-2 focus:ring-[#00E599]">
+            <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80" alt="Male 4" class="w-full h-full object-cover">
+          </button>
+        </div>
+      </div>
+
+      <!-- Inputs Form -->
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="text-slate-400 block mb-1">Full Name</label>
+          <input id="editNameInput" type="text" value="Varun M." class="w-full bg-[#071927] p-2.5 rounded-xl border border-slate-700 text-white focus:border-[#00E599] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="text-slate-400 block mb-1">Role / Security Tier</label>
+          <input id="editRoleInput" type="text" value="Cyber Security Admin" class="w-full bg-[#071927] p-2.5 rounded-xl border border-slate-700 text-white focus:border-[#00E599] focus:outline-none">
+        </div>
+
+        <div>
+          <label class="text-slate-400 block mb-1">Emergency Phone Contact</label>
+          <input id="editPhoneInput" type="text" value="+91 98765 43210" class="w-full bg-[#071927] p-2.5 rounded-xl border border-slate-700 text-white focus:border-[#00E599] focus:outline-none">
+        </div>
+      </div>
+
+      <div class="pt-2 flex gap-2">
+        <button onclick="closeEditProfileModal()" class="flex-1 py-2.5 bg-slate-800 text-slate-300 rounded-xl font-semibold text-xs">Cancel</button>
+        <button onclick="saveProfileChanges()" class="flex-1 py-2.5 bg-[#00E599] hover:bg-[#00D2B4] text-black rounded-xl font-bold text-xs shadow-lg shadow-[#00E599]/20 transition">Save Profile</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // Navigation between screens
+    function navigateScreen(screenId) {
+      // Hide all screens
+      document.querySelectorAll('.app-screen').forEach(s => s.classList.add('hidden'));
+
+      // Show requested
+      const target = document.getElementById('screen-' + screenId);
+      if (target) target.classList.remove('hidden');
+
+      // Update Desktop switcher tabs
+      document.querySelectorAll('.desktop-screen-switcher button').forEach(btn => {
+        btn.classList.remove('bg-[#00D2B4]/20', 'text-[#00E599]', 'border', 'border-[#00E599]/40');
+        btn.classList.add('text-slate-400');
+      });
+      const currentTab = document.getElementById('tab-btn-' + screenId);
+      if (currentTab) {
+        currentTab.classList.remove('text-slate-400');
+        currentTab.classList.add('bg-[#00D2B4]/20', 'text-[#00E599]', 'border', 'border-[#00E599]/40');
+      }
+
+      // Update bottom nav
+      document.querySelectorAll('.nav-tab').forEach(t => {
+        t.classList.remove('text-[#00E599]');
+        t.classList.add('text-slate-400');
+      });
+      const activeNav = document.getElementById('nav-item-' + screenId);
+      if (activeNav) {
+        activeNav.classList.remove('text-slate-400');
+        activeNav.classList.add('text-[#00E599]');
+      }
+    }
+
+    // Interactive Profile Editing
+    let currentChosenAvatar = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80";
+
+    function openEditProfileModal() {
+      document.getElementById('editProfileModal').classList.remove('hidden');
+      document.getElementById('editProfileModal').classList.add('flex');
+    }
+
+    function closeEditProfileModal() {
+      document.getElementById('editProfileModal').classList.add('hidden');
+      document.getElementById('editProfileModal').classList.remove('flex');
+    }
+
+    function selectAvatar(url) {
+      currentChosenAvatar = url;
+    }
+
+    function saveProfileChanges() {
+      const newName = document.getElementById('editNameInput').value.trim() || "Varun M.";
+      document.getElementById('userDisplayName').innerText = newName;
+      document.getElementById('userAvatarImg').src = currentChosenAvatar;
+      closeEditProfileModal();
+      alert("Profile updated successfully! Name and male profile avatar saved.");
+    }
+
+    // Link Scan Action
+    function analyzeLinkAction() {
+      const val = document.getElementById('urlInputVal').value.trim();
+      document.getElementById('resultUrlLabel').innerText = val || "www.ptomodiskon.net";
+      alert("AI Scanning complete: Threat patterns detected for " + (val || "www.ptomodiskon.net"));
+    }
+
+    function blockLinkAction() {
+      const btn = document.getElementById('blockBtnText');
+      btn.innerText = "✓ Link Blocked & Blacklisted";
+      btn.classList.add('text-[#00E599]', 'border-[#00E599]');
+      alert("Domain added to global phishing blacklist and CERT-In database.");
+    }
+
+    // SOS Countdown Hold
+    let sosInterval = null;
+    let count = 3;
+
+    function startSosHold() {
+      count = 3;
+      const label = document.getElementById('sosCountdownLabel');
+      label.innerText = count;
+      sosInterval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          label.innerText = count;
+        } else {
+          clearInterval(sosInterval);
+          label.innerText = "🚨 SENT";
+          document.getElementById('sosAlertStatus').innerHTML = "<span class='text-red-400 font-bold'>EMERGENCY SOS BROADCASTED! GPS Shared with 112 Police & Family.</span>";
+        }
+      }, 900);
+    }
+
+    function stopSosHold() {
+      if (sosInterval) {
+        clearInterval(sosInterval);
+        sosInterval = null;
+      }
+      if (count > 0) {
+        document.getElementById('sosCountdownLabel').innerText = "HOLD SOS";
+      }
+    }
+  </script>
+</body>
+</html>

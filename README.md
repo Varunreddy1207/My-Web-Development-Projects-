@@ -1,4 +1,8 @@
-# 🛡️ VOZX.AI — CyberGuard: AI Phishing Attack Shield & Safety Assistant
+<p align="center">
+  <img src="logo.png" width="96" alt="VOZX AI Logo" style="border-radius: 22px;">
+</p>
+
+# <p align="center">🛡️ VOZX AI — CyberGuard: AI Phishing Attack Shield & Safety Assistant</p>
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)

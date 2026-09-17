@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CyberGuard — Phishing Attack Shield & Safety Assistant</title>
+  <title>VOZX AI — CyberGuard Phishing Attack Shield & Safety Assistant</title>
+  <link rel="icon" type="image/png" href="logo.png">
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -123,15 +124,15 @@
       <!-- Top Ambient Teal Glow Effect -->
       <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-80 h-52 bg-gradient-to-b from-[#00E599]/25 to-transparent rounded-full blur-[65px] pointer-events-none"></div>
 
-      <!-- Top Status Bar with VOZX.AI Capsule (9:41, Cellular, Wifi, Battery) -->
+      <!-- Top Status Bar with VOZX AI Capsule (9:41, Cellular, Wifi, Battery) -->
       <div class="relative z-30 pt-3.5 px-6 pb-1 flex items-center justify-between text-xs text-slate-300 font-semibold select-none">
         <span class="tracking-tight text-white font-mono text-[13px]">9:41</span>
         
-        <!-- Center Top Dynamic Capsule: VOZX.AI -->
-        <div class="flex items-center justify-center gap-1.5 px-3 py-1 rounded-full bg-black/85 border border-[#00E599]/40 text-[#00E599] text-[10px] font-mono tracking-widest font-black shadow-[0_0_15px_rgba(0,229,153,0.35)]">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#00E599] animate-pulse"></span>
-          <span>VOZX.AI</span>
-        </div>
+        <!-- Center Top Dynamic Capsule: VOZX AI -->
+        <button onclick="window.location.reload()" title="Click to reload page" class="flex items-center justify-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black/85 border border-cyan-400/40 text-cyan-400 text-[10px] font-mono tracking-widest font-bold shadow-[0_0_12px_rgba(0,194,255,0.35)] cursor-pointer active:scale-95 transition-all">
+          <img src="logo.png" alt="VOZX AI" class="w-3.5 h-3.5 rounded-[3px] object-contain">
+          <span>VOZX AI</span>
+        </button>
 
         <div class="flex items-center gap-1.5 text-white">
           <!-- Cellular -->
@@ -146,12 +147,15 @@
       </div>
 
       <!-- Top Device Header: Brand + Quick Switcher on TOP OF THE DEVICE -->
-      <div class="relative z-30 px-5 pt-1.5 pb-2 flex items-center justify-between border-b border-white/5">
-        <div class="flex items-center gap-1.5">
-          <div class="w-2 h-2 rounded-full bg-[#00E599] animate-ping"></div>
-          <span class="text-xs font-black font-mono tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#00E599] via-[#00D2B4] to-[#00C2FF]">VOZX.AI</span>
-          <span class="text-[10px] text-slate-400 font-mono">CyberGuard</span>
-        </div>
+      <div class="relative z-30 px-4 pt-1.5 pb-2 flex items-center justify-between border-b border-white/5">
+        <!-- Clickable Brand Logo: Clicking reloads page -->
+        <button onclick="window.location.reload()" title="Click logo to reload page" class="flex items-center gap-2 group cursor-pointer active:scale-95 transition-all text-left">
+          <img src="logo.png" alt="VOZX AI Logo" class="w-8 h-8 rounded-xl object-contain shadow-[0_0_14px_rgba(0,194,255,0.45)] border border-cyan-400/40 group-hover:border-cyan-300 group-hover:shadow-[0_0_18px_rgba(0,194,255,0.7)] transition-all">
+          <div class="flex flex-col">
+            <span class="text-xs font-black font-mono tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#00D2B4] via-[#00C2FF] to-[#3B82F6] leading-tight">VOZX AI</span>
+            <span class="text-[9px] text-slate-400 font-mono leading-none">CyberGuard</span>
+          </div>
+        </button>
 
         <!-- Quick Tabs on top of the device inside the phone screen -->
         <div class="flex items-center gap-1 text-[10px] font-semibold bg-black/60 p-0.5 rounded-full border border-slate-800">
